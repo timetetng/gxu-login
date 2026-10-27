@@ -14,7 +14,35 @@ Linux、Python 3.10+。
 - 校园网认证：curl 8.9+。
 - PPPoE：NetworkManager、nmcli。
 
-无需安装 Python 第三方库。
+无需安装 Python 第三方库。PPPoE 拨号需要额外的 PPP 支持，按发行版安装：
+
+```sh
+# Debian / Ubuntu
+sudo apt update
+sudo apt install python3 curl network-manager ppp
+
+# Arch Linux
+sudo pacman -S python curl networkmanager ppp
+
+# Fedora
+sudo dnf install python3 curl NetworkManager NetworkManager-ppp ppp
+```
+
+`nmcli` 由 NetworkManager 软件包提供；PPP/PPPoE 后端由 `ppp` 提供，Fedora 还需 `NetworkManager-ppp` 插件。这里通过 NetworkManager 拨号，不需要另装 `pppoeconf`。
+
+拨号前确认 NetworkManager 已运行：
+
+```sh
+systemctl is-active NetworkManager
+```
+
+尚未配置网络管理器的新系统可启动它：
+
+```sh
+sudo systemctl enable --now NetworkManager
+```
+
+如果当前网络由其他管理器维护，先自行完成迁移，不要直接同时启用。校园网认证还需检查 `curl --version`，低于 8.9 时先升级 curl。
 
 ## 运营商 PPPoE 拨号
 
